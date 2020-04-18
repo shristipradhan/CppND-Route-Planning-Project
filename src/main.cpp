@@ -11,14 +11,14 @@
 using namespace std::experimental;
 
 static std::optional<std::vector<std::byte>> ReadFile(const std::string &path)
-{   
+{
     std::ifstream is{path, std::ios::binary | std::ios::ate};
     if( !is )
         return std::nullopt;
-    
+
     auto size = is.tellg();
-    std::vector<std::byte> contents(size);    
-    
+    std::vector<std::byte> contents(size);
+
     is.seekg(0);
     is.read((char*)contents.data(), size);
 
@@ -28,7 +28,7 @@ static std::optional<std::vector<std::byte>> ReadFile(const std::string &path)
 }
 
 int main(int argc, const char **argv)
-{    
+{
     std::string osm_data_file = "";
     if( argc > 1 ) {
         for( int i = 1; i < argc; ++i )
@@ -40,9 +40,9 @@ int main(int argc, const char **argv)
         std::cout << "Usage: [executable] [-f filename.osm]" << std::endl;
         osm_data_file = "../map.osm";
     }
-    
+
     std::vector<std::byte> osm_data;
- 
+
     if( osm_data.empty() && !osm_data_file.empty() ) {
         std::cout << "Reading OpenStreetMap data from the following file: " <<  osm_data_file << std::endl;
         auto data = ReadFile(osm_data_file);
@@ -51,26 +51,24 @@ int main(int argc, const char **argv)
         else
             osm_data = std::move(*data);
     }
-    
-    // TODO 1: Declare floats `start_x`, `start_y`, `end_x`, and `end_y` and get
-    // user input for these values using std::cin. Pass the user input to the
-    // RoutePlanner object below in place of 10, 10, 90, 90.
+
     float start_x;
     float start_y;
     float end_x;
     float end_y;
 
-    //std::cin >> start_x >> start_y >> end_x >> end_y;
+    // Get start and end coordinates from the user.
+    std::cout << "Enter start coordinate (x):\n";
+    std::cin >> start_x;
 
-    std::cout << "\n3rd argument = " << argv[3] << "\n";
-    std::cout << "\n4th argument = " << argv[4] << "\n";
-    std::cout << "\n5th argument = " << argv[5] << "\n";
-    std::cout << "\n6th argument = " << argv[6] << "\n";
+    std::cout << "Enter start coordinate (y):\n";
+    std::cin >> start_y;
 
-    start_x = atof(argv[3]);
-    start_y = atof(argv[4]);
-    end_x = atof(argv[5]);
-    end_y = atof(argv[6]);
+    std::cout << "Enter end coordinate (x):\n";
+    std::cin >> end_x;
+
+    std::cout << "Enter end coordinate (y):\n";
+    std::cin >> end_y;
 
     // Build Model.
     RouteModel model{osm_data};
